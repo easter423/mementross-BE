@@ -29,12 +29,5 @@ public class OauthController {
         return oauthService.requestAccessToken(socialLoginType, code);
     }
 
-    @PostMapping(value = "/{socialLoginType}/callback")
-    public String callback2(
-            @PathVariable(name = "socialLoginType") SocialLoginType socialLoginType,
-            @RequestParam(name = "code") String code){
-        log.info(">> POST: 소셜 로그인 API 서버로부터 받은 code :: {}", code);
-        return oauthService.requestAccessToken(socialLoginType, code);
-    }
 }
 

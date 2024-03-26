@@ -55,9 +55,10 @@ public class InstaOauth implements SocialOauth {
         params.add("redirect_uri", INSTAGRAM_SNS_CALLBACK_URL);
         params.add("code", code);
 
+        System.out.println(code);
         ResponseEntity<String> responseEntity =
                 restTemplate.postForEntity(INSTAGRAM_SNS_TOKEN_BASE_URL, params, String.class);
-
+        System.out.println(code);
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             return responseEntity.getBody();
 //            JSONObject jsonObject = new JSONObject(responseEntity.getBody());
