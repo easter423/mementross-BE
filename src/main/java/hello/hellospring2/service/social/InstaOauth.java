@@ -1,6 +1,7 @@
 package hello.hellospring2.service.social;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class InstaOauth implements SocialOauth {
     @Value("${sns.instagram.url}")
     private String INSTAGRAM_SNS_BASE_URL;
@@ -55,10 +57,10 @@ public class InstaOauth implements SocialOauth {
         params.add("redirect_uri", INSTAGRAM_SNS_CALLBACK_URL);
         params.add("code", code);
 
-        System.out.println(code);
+        log.info(">> A code :: {} ", code);
         ResponseEntity<String> responseEntity =
                 restTemplate.postForEntity(INSTAGRAM_SNS_TOKEN_BASE_URL, params, String.class);
-        System.out.println(code);
+        log.info(">> B code :: {} ", code);
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             return responseEntity.getBody();
 //            JSONObject jsonObject = new JSONObject(responseEntity.getBody());
