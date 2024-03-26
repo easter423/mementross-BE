@@ -1,8 +1,6 @@
 package hello.hellospring2.service.social;
 
 import lombok.RequiredArgsConstructor;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +45,7 @@ public class InstaOauth implements SocialOauth {
     }
 
     @Override
-    public String requestAccessToken(String code) throws JSONException {
+    public String requestAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -61,21 +59,23 @@ public class InstaOauth implements SocialOauth {
                 restTemplate.postForEntity(INSTAGRAM_SNS_TOKEN_BASE_URL, params, String.class);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
-            JSONObject jsonObject = new JSONObject(responseEntity.getBody());
-            JSONObject item = jsonObject.getJSONObject("access_token");
-            RestTemplate longRestTemplate = new RestTemplate();
-            MultiValueMap<String, String> longParams = new LinkedMultiValueMap<>();
-            longParams.add("client_secret", INSTAGRAM_SNS_CLIENT_SECRET);
-            longParams.add("grant_type", "ig_exchange_token");
-            longParams.add("access_token", String.valueOf(item));
-
-            ResponseEntity<String> longResponseEntity =
-                    longRestTemplate.postForEntity(INSTAGRAM_SNS_LONG_TOKEN_BASE_URL, longParams, String.class);
-
-            if (longResponseEntity.getStatusCode() == HttpStatus.OK) {
-                return longResponseEntity.getBody();
-            }
-            return "인스타그램 장기 토큰 발행 요청 처리 실패";
+            return responseEntity.getBody();
+//            JSONObject jsonObject = new JSONObject(responseEntity.getBody());
+//            String short_access_token = jsonObject.getString("access_token");
+//            RestTemplate longRestTemplate = new RestTemplate();
+//            MultiValueMap<String, String> longParams = new LinkedMultiValueMap<>();
+//            longParams.add("grant_type", "ig_exchange_token");
+//            longParams.add("client_secret", INSTAGRAM_SNS_CLIENT_SECRET);
+//            longParams.add("access_token", short_access_token);
+//            System.out.println(short_access_token);
+//
+//            ResponseEntity<String> longResponseEntity =
+//                    longRestTemplate.postForEntity(INSTAGRAM_SNS_LONG_TOKEN_BASE_URL, longParams, String.class);
+//
+//            if (longResponseEntity.getStatusCode() == HttpStatus.OK) {
+//                return longResponseEntity.getBody();
+//            }
+//            return "인스타그램 장기 토큰 발행 요청 처리 실패";
         }
         return "인스타그램 로그인 요청 처리 실패";
     }

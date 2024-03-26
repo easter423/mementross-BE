@@ -4,9 +4,7 @@ import hello.hellospring2.repository.constants.SocialLoginType;
 import hello.hellospring2.service.social.SocialOauth;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONException;
 import org.springframework.stereotype.Service;
-import hello.hellospring2.service.social.InstaOauth;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,7 +25,7 @@ public class OauthService {
         }
     }
 
-    public String requestAccessToken(SocialLoginType socialLoginType, String code) throws JSONException {
+    public String requestAccessToken(SocialLoginType socialLoginType, String code) {
         SocialOauth socialOauth = this.findSocialOauthByType(socialLoginType);
         return socialOauth.requestAccessToken(code);
     }

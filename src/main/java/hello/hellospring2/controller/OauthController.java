@@ -1,11 +1,9 @@
 package hello.hellospring2.controller;
 
-import hello.hellospring2.domain.Member;
 import hello.hellospring2.repository.constants.SocialLoginType;
 import hello.hellospring2.service.OauthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,7 +24,7 @@ public class OauthController {
     @GetMapping(value = "/{socialLoginType}/callback")
     public String callback(
             @PathVariable(name = "socialLoginType") SocialLoginType socialLoginType,
-            @RequestParam(name = "code") String code) throws JSONException {
+            @RequestParam(name = "code") String code){
         log.info(">> 소셜 로그인 API 서버로부터 받은 code :: {}", code);
         return oauthService.requestAccessToken(socialLoginType, code);
     }
