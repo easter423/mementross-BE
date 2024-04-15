@@ -1,22 +1,35 @@
 package hello.hellospring2.domain;
 
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+
+import jakarta.persistence.*;
+
+@Getter
+@Entity
+@Builder
+@DynamicUpdate
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id", nullable=false)
     private Long id;
-    private String name;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "member_guid", nullable = false)
+    private String guid;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "member_insta_username", nullable = true)
+    private String instaUsername;
 
-    public String getName() {
-        return name;
-    }
+    @Column(name = "member_insta_id", nullable = true)
+    private String instaId;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Column(name = "member_insta_posting", nullable = true)
+    private String instaPosting;
+
+    @Column(name = "member_phone_id", nullable = true)
+    private String phoneId;
+
 }
