@@ -5,9 +5,7 @@ import hello.hellospring2.controller.DTO.SignUpFormDTO;
 import hello.hellospring2.domain.Member;
 import hello.hellospring2.repository.MemberRepository;
 import jakarta.transaction.Transactional;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -87,32 +85,3 @@ public class MemberServiceImpl implements MemberService {
     }
 }
 
-@Getter
-@Setter
-class Result{
-    private Long id;
-    private String guid;
-    private String instaUsername;
-    private String instaId;
-    private String phoneId;
-    private int status;
-
-    public Result(Member member, int status){
-        this.id = member.getId();
-        this.guid = member.getGuid();
-        this.instaUsername = member.getInstaUsername();
-        this.instaId = member.getInstaId();
-        this.phoneId = member.getPhoneId();
-        this.status = status;
-    }
-}
-
-@Getter
-@Setter
-class StatusResult{
-    private int status;
-
-    public StatusResult(int status){
-        this.status = status;
-    }
-}
