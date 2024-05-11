@@ -3,22 +3,25 @@ package hello.hellospring2.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.hellospring2.controller.DTO.Value;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 public class AzureVisionController {
-
-    @GetMapping("/keywords")
-    public String getKeywords(@RequestParam String imageUrl) throws JsonProcessingException {
+    @GetMapping("/keywords/{imageUrl}")
+    @Parameter(name = "imageUrl", description = "Image Url to convert", example = "https://assets.clevelandclinic.org/transform/cd71f4bd-81d4-45d8-a450-74df78e4477a/Apples-184940975-770x533-1_jpg", required = true)
+    public String getKeywords(@RequestParam(name = "imageUrl") String imageUrl) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
 
         String url = "https://junseoj98.cognitiveservices.azure.com/computervision/imageanalysis:analyze?api-version=2024-02-01&features=DenseCaptions&model-version=latest&language=en&gender-neutral-caption=False";
