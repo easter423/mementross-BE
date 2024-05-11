@@ -8,7 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, String> {
-    Optional<Member> findByInstaId(String name);
+    @Query(value = "SELECT * FROM member WHERE member_insta_id = :name AND invalid = false", nativeQuery = true)
+    Optional<Member> findByInstaId(@Param("name")String name);
     @Query(value = "SELECT * FROM member WHERE member_phone_id = :phoneId AND invalid = false", nativeQuery = true)
     Optional<Member> findByPhoneId(@Param("phoneId")String phoneId);
 }
