@@ -5,7 +5,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 @Entity
 @Builder
 @DynamicUpdate
@@ -36,7 +36,7 @@ public class Diary {
     private String image2txt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_guid", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
 }
