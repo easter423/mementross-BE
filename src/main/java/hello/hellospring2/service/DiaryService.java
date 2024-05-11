@@ -52,7 +52,7 @@ public class DiaryService {
             "A short diary in korean.\"\n" +
             "#description of the photo#";
 
-    public void createDiary(Long memberId, List<String> keywords){
+    public String createDiary(Long memberId, List<String> keywords){
         for (String keyword : keywords) {
             prompt += keyword;
         }
@@ -86,6 +86,8 @@ public class DiaryService {
         log.info("Diary created: {}", diary);
 
         diaryRepository.save(diary);
+
+        return diary.getContent();
     }
 
     public List<String> getDiaries(Long memberId) {
