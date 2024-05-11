@@ -20,9 +20,11 @@ public class Member {
     @Column(name = "member_guid", nullable = false)
     private String guid;
 
+    @Setter
     @Column(name = "member_insta_username", nullable = true)
     private String instaUsername;
 
+    @Setter
     @Column(name = "member_insta_id", nullable = true)
     private String instaId;
 
@@ -31,5 +33,12 @@ public class Member {
 
     @Column(name = "member_phone_id", nullable = true)
     private String phoneId;
+
+    @Column(name = "invalid", nullable = false)
+    private Boolean invalid;
+
+    public void setInvalid(boolean b) {
+        this.invalid=b;
+    }
 
 }
