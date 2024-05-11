@@ -20,8 +20,9 @@ public class DiaryController {
      * @param requestDTO
      */
     @PostMapping
-    public void createDiary(@RequestBody DiaryRequestDTO requestDTO) {
-        diaryService.createDiary(requestDTO.getMemberId(), requestDTO.getKeywords());
+    public String createDiary(@RequestBody DiaryRequestDTO requestDTO) {
+        String result = diaryService.createDiary(requestDTO.getMemberId(), requestDTO.getKeywords());
+        return result;
     }
 
     @GetMapping("/{diaryId}")
