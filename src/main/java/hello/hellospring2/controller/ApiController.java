@@ -1,5 +1,6 @@
 package hello.hellospring2.controller;
 
+import hello.hellospring2.controller.DTO.GuestSignFormDTO;
 import hello.hellospring2.controller.DTO.SignUpFormDTO;
 import hello.hellospring2.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -19,4 +20,14 @@ public class ApiController {
     public ResponseEntity userSignup(@RequestBody SignUpFormDTO formDTO) {
         return memberService.signup(formDTO);
     }
+
+    @PostMapping("/guestsignup")
+    public ResponseEntity GuestuserSignup(@RequestBody GuestSignFormDTO formDTO) {
+        return memberService.guestsignup(formDTO);
+    }
+    @PostMapping("/guestsignout")
+    public ResponseEntity GuestuserSignout(@RequestBody GuestSignFormDTO formDTO) {
+        return memberService.guestsignout(formDTO);
+    }
+
 }
