@@ -3,6 +3,7 @@ package hello.hellospring2.controller;
 
 import hello.hellospring2.controller.DTO.DiaryRequestDTO;
 import hello.hellospring2.service.DiaryService;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,23 +26,27 @@ public class DiaryController {
         return result;
     }
 
+    @Parameter(name = "diaryId", description = "Diary Primary Key to be added", example = "1", required = true)
     @GetMapping("/{diaryId}")
-    public String getDiary(@PathVariable Long diaryId) {
+    public String getDiary(@PathVariable(name = "diaryId") Long diaryId) {
         return diaryService.getDiary(diaryId);
     }
 
-    @GetMapping("/{memberId}")
-    public List<String> getDiaries(@PathVariable Long memberId) {
+    @Parameter(name = "memberId", description = "Member Primary Key", example = "1", required = true)
+    @GetMapping("/member/{memberId}")
+    public List<String> getDiaries(@PathVariable(name = "memberId") Long memberId) {
         return diaryService.getDiaries(memberId);
     }
 
+    @Parameter(name = "diaryId", description = "Diary Primary Key to be updated", example = "1", required = true)
     @PatchMapping("/{diaryId}")
-    public void updateDiary(@PathVariable Long diaryId, @RequestBody String content) {
+    public void updateDiary(@PathVariable(name = "diaryId") Long diaryId, @RequestBody String content) {
         diaryService.updateDiary(diaryId, content);
     }
 
+    @Parameter(name = "diaryId", description = "Diary Primary Key to be deleted", example = "1", required = true)
     @DeleteMapping("/{diaryId}")
-    public void deleteDiary(@PathVariable Long diaryId) {
+    public void deleteDiary(@PathVariable(name = "diaryId") Long diaryId) {
         diaryService.deleteDiary(diaryId);
     }
 }
