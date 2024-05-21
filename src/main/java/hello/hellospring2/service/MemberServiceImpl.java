@@ -6,6 +6,7 @@ import hello.hellospring2.domain.Member;
 import hello.hellospring2.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,18 +16,20 @@ import java.util.UUID;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
 
-    public ResponseEntity<Result> signup(SignUpFormDTO formDTO) {
+    public ResponseEntity<Result> signup(SignUpFormDTO  formDTO) {
 
         Optional<Member> member = memberRepository.findByInstaId(formDTO.getInstaId());
 
+        log.info("member: {}", member);
         if (member.isEmpty()) {
-
             Optional<Member> member2 = memberRepository.findByPhoneId(formDTO.getPhoneId());
-            if (!member2.isEmpty()) {
+            log.info("member2: {}", member2);
+            if (member2.isPresent()) {
                 if (formDTO.getInstaUsername()!=null) {
                     member2.get().setInstaUsername(formDTO.getInstaUsername());
                     member2.get().setInstaId(formDTO.getInstaId());
@@ -43,6 +46,9 @@ public class MemberServiceImpl implements MemberService {
                     .guid(UUID.randomUUID().toString())
                     .invalid(false)
                     .build();
+
+            log.info("newMember: {}", newMember);
+
 
             if (formDTO.getInstaUsername()!=null) {
                 memberRepository.save(newMember);

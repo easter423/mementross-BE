@@ -1,7 +1,5 @@
 package hello.hellospring2.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.hellospring2.controller.DTO.ChatGptRequest;
 import hello.hellospring2.controller.DTO.ChatGptResponse;
 import hello.hellospring2.controller.DTO.Message;
@@ -16,7 +14,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
@@ -52,7 +49,7 @@ public class DiaryService {
             "A short diary in korean.\"\n" +
             "#description of the photo#";
 
-    public String createDiary(Long memberId, List<String> keywords){
+    public Diary createDiary(String memberGuid, LocalDateTime created, List<String> keywords){
         for (String keyword : keywords) {
             prompt += keyword;
         }
@@ -74,24 +71,24 @@ public class DiaryService {
         ChatGptResponse chatGptResponse = response.getBody();
         System.out.println(chatGptResponse.getChoices().get(0).getMessage().getContent());
 
-        Member member = memberRepository.findById(memberId).get();
+        Member member = memberRepository.findById(memberGuid).get();
 
         Diary diary = Diary.builder()
                 .member(member)
                 .content(chatGptResponse.getChoices().get(0).getMessage().getContent())
-                .created(LocalDateTime.now())
-                .updated(LocalDateTime.now())
+                .created(created)
+                .updated(created)
                 .build();
 
         log.info("Diary created: {}", diary);
 
         diaryRepository.save(diary);
 
-        return diary.getContent();
+        return diary;
     }
 
-    public List<String> getDiaries(Long memberId) {
-        Member member = memberRepository.findById(memberId).get();
+    public List<String> getDiaries(String memberGuId) {
+        Member member = memberRepository.findById(memberGuId).get();
         List<Diary> diaries = diaryRepository.findByMember(member);
 
         return diaries.stream()
@@ -113,5 +110,13 @@ public class DiaryService {
     public String getDiary(Long diaryId) {
         Diary diary = diaryRepository.findById(diaryId).get();
         return diary.getContent();
+    }
+
+    public List<Diary> getDiariesWithTime(String memberGuid, LocalDateTime time) {
+        Member member = memberRepository.findById(memberGuid).get();
+        time = time.withHour(0).withMinute(0).withSecond(0).withNano(0);
+        List<Diary> diaries = diaryRepository.findByMemberAndCreatedBetween(member, time, time.plusDays(1));
+
+        return diaries;
     }
 }
