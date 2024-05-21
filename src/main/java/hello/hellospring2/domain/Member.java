@@ -13,11 +13,11 @@ import jakarta.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id", nullable=false)
-    private Long id;
+//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "member_id", nullable=false)
+//    private Long id;
 
-    @Column(name = "member_guid", nullable = false)
+    @Id @Column(name = "member_guid", nullable = false)
     private String guid;
 
     @Setter
