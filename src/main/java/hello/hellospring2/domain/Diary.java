@@ -36,7 +36,7 @@ public class Diary {
     private String image2txt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_guid", nullable = false)
     private Member member;
 
 }
