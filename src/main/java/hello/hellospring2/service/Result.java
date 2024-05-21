@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Result{
-    private Long id;
+//    private Long id;
     private String guid;
     private String instaUsername;
     private String instaId;
@@ -15,7 +15,7 @@ public class Result{
     private int status;
 
     public Result(Member member, int status){
-        this.id = member.getId();
+//        this.id = member.getId();
         this.guid = member.getGuid();
         this.instaUsername = member.getInstaUsername();
         this.instaId = member.getInstaId();
