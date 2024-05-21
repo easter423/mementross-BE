@@ -2,12 +2,17 @@ package hello.hellospring2.controller;
 
 
 import hello.hellospring2.controller.DTO.DiaryRequestDTO;
+import hello.hellospring2.controller.DTO.DiaryResponseDTO;
+import hello.hellospring2.controller.DTO.MemberDiaryRequestDTO;
+import hello.hellospring2.domain.Diary;
 import hello.hellospring2.service.DiaryService;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/diary")
@@ -21,21 +26,17 @@ public class DiaryController {
      * @param requestDTO
      */
     @PostMapping
-    public String createDiary(@RequestBody DiaryRequestDTO requestDTO) {
-        String result = diaryService.createDiary(requestDTO.getMemberId(), requestDTO.getKeywords());
-        return result;
+    public ResponseEntity<DiaryResponseDTO> createDiary(@RequestBody DiaryRequestDTO requestDTO) {
+        Diary result = diaryService.createDiary(requestDTO.getMemberId(), requestDTO.getCreated(), requestDTO.getKeywords());
+        return ResponseEntity.ok(new DiaryResponseDTO(requestDTO.getMemberId(), result.getId(), result.getContent()));
     }
 
-    @Parameter(name = "diaryId", description = "Diary Primary Key to be added", example = "1", required = true)
-    @GetMapping("/{diaryId}")
-    public String getDiary(@PathVariable(name = "diaryId") Long diaryId) {
-        return diaryService.getDiary(diaryId);
-    }
-
-    @Parameter(name = "memberId", description = "Member Primary Key", example = "1", required = true)
-    @GetMapping("/member/{memberId}")
-    public List<String> getDiaries(@PathVariable(name = "memberId") Long memberId) {
-        return diaryService.getDiaries(memberId);
+    @Parameter(name = "memberGuid, time", description = "Me", example = "1", required = true)
+    @GetMapping
+    public List<DiaryResponseDTO> getDiariesWithTime(@ModelAttribute MemberDiaryRequestDTO requestDTO) {
+        List<Diary> diaries = diaryService.getDiariesWithTime(requestDTO.getMemberGuid(), requestDTO.getTime());
+        return diaries.stream().map(diary ->
+                new DiaryResponseDTO(requestDTO.getMemberGuid(), diary.getId(), diary.getContent())).collect(Collectors.toList());
     }
 
     @Parameter(name = "diaryId", description = "Diary Primary Key to be updated", example = "1", required = true)
