@@ -1,17 +1,21 @@
 package hello.hellospring2.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 @Controller
 public class HelloController {
+    @Value("${openai.api-key}")
+    private String test;
 
     @GetMapping("hello")
     public String hello(Model model){
-        model.addAttribute("data","hello!");
+        model.addAttribute("data",test);
         return "hello";
     }
 
