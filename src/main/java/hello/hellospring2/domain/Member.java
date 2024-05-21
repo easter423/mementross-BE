@@ -12,6 +12,7 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
+
     @Id @Column(name = "member_guid", nullable = false)
     private String guid;
 
