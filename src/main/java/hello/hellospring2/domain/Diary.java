@@ -32,6 +32,9 @@ public class Diary {
     @Column(name = "diary_imageUrl", nullable = true)
     private String imageUrl;
 
+    @Column(name = "createdImage", nullable = true)
+    private String createdImage;
+
     @Column(name = "diary_image2txt", nullable = true)
     private String image2txt;
 
