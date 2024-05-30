@@ -12,13 +12,16 @@ import java.util.List;
 @Schema(title = "Diary DTO")
 public class DiaryRequestDTO {
     @Schema(description = "Member unique Id.", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
-    private String memberId;
+    private String memberGuId;
 
     @Schema(description = "Diary date.", example = "2024-01-01", requiredMode = Schema.RequiredMode.AUTO)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime created;
     @Schema(description = "Prompt Keyword list.", example = "[\"happy\"]", requiredMode = Schema.RequiredMode.AUTO)
     private List<String> keywords;
+
+    @Schema(description = "Diary image uri.", example = "", requiredMode = Schema.RequiredMode.AUTO)
+    private String imageUrl;
 
 
 }

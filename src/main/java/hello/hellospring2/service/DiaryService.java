@@ -1,8 +1,6 @@
 package hello.hellospring2.service;
 
-import hello.hellospring2.controller.DTO.ChatGptRequest;
-import hello.hellospring2.controller.DTO.ChatGptResponse;
-import hello.hellospring2.controller.DTO.Message;
+import hello.hellospring2.controller.DTO.*;
 import hello.hellospring2.domain.Diary;
 import hello.hellospring2.domain.Member;
 import hello.hellospring2.repository.DiaryRepository;
@@ -14,6 +12,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
@@ -22,6 +21,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class DiaryService {
 
     private final DiaryRepository diaryRepository;
@@ -49,7 +49,7 @@ public class DiaryService {
             "A short diary in korean.\"\n" +
             "#description of the photo#";
 
-    public Diary createDiary(String memberGuid, LocalDateTime created, List<String> keywords){
+    public Diary createDiary(String memberGuid, LocalDateTime created, List<String> keywords, String imageUri){
         for (String keyword : keywords) {
             prompt += keyword;
         }
@@ -76,6 +76,7 @@ public class DiaryService {
         Diary diary = Diary.builder()
                 .member(member)
                 .content(chatGptResponse.getChoices().get(0).getMessage().getContent())
+                .imageUrl(imageUri)
                 .created(created)
                 .updated(created)
                 .build();
@@ -119,4 +120,32 @@ public class DiaryService {
 
         return diaries;
     }
+
+    public String createImageByTextDiary(String memberGuId, String content) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + apiKey);
+        headers.set("Content-Type", "application/json");
+
+        DalleRequest dalleRequest = new DalleRequest();
+        dalleRequest.setModel("dall-e-3");
+        dalleRequest.setPrompt(content);
+        dalleRequest.setN(1L);
+        dalleRequest.setSize("1024x1024");
+
+
+        HttpEntity<DalleRequest> dalleRequestHttpEntity = new HttpEntity<>(dalleRequest, headers);
+        url = "https://api.openai.com/v1/images/generations";
+        ResponseEntity<DalleResponse> response = restTemplate.postForEntity(url, dalleRequestHttpEntity, DalleResponse.class);
+
+        DalleResponse dalleResponse = response.getBody();
+        assert dalleResponse != null;
+
+        Diary diary = diaryRepository.findByMember(memberRepository.findById(memberGuId).get()).get(0);
+        diary.setCreatedImage(dalleResponse.getData().get(0).getUrl());
+
+        return dalleResponse.getData().get(0).getUrl();
+    }
+
 }
